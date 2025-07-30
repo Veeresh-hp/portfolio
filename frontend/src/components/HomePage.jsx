@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Github, Linkedin, Download, ExternalLink } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, Linkedin, Download, ExternalLink, Menu, X, Moon, Sun } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -14,6 +14,8 @@ import ContactSection from './ContactSection';
 
 const HomePage = () => {
   const [activeSection, setActiveSection] = useState('hero');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -69,100 +71,179 @@ const HomePage = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    setMobileMenuOpen(false);
   };
 
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+  };
+
+  const navItems = ['About', 'Projects', 'Skills', 'Education', 'Contact'];
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-white'}`}>
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <nav className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-colors duration-300 ${
+        darkMode ? 'bg-gray-900/80 border-gray-800' : 'bg-white/80 border-gray-100'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
-              <h1 className="text-xl font-bold text-gray-900">Veeresh H P</h1>
+              <h1 className={`text-xl font-bold transition-colors ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                Veeresh H P
+              </h1>
             </div>
+            
+            {/* Desktop Navigation */}
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                {['About', 'Projects', 'Skills', 'Education', 'Contact'].map((item) => (
+              <div className="ml-10 flex items-center space-x-4">
+                {navItems.map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item.toLowerCase())}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       activeSection === item.toLowerCase()
-                        ? 'text-blue-600 bg-blue-50'
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                        ? darkMode 
+                          ? 'text-blue-400 bg-blue-900/30' 
+                          : 'text-blue-600 bg-blue-50'
+                        : darkMode
+                          ? 'text-gray-300 hover:text-blue-400 hover:bg-gray-800'
+                          : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleTheme}
+                  className={`ml-4 ${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                >
+                  {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </Button>
+              </div>
+            </div>
+
+            {/* Mobile Navigation Button */}
+            <div className="md:hidden flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleTheme}
+                className={`${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+              >
+                {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className={`${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </Button>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className={`md:hidden py-4 border-t ${darkMode ? 'border-gray-800' : 'border-gray-100'}`}
+            >
+              <div className="flex flex-col space-y-2">
+                {navItems.map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className={`px-4 py-2 text-left rounded-md text-sm font-medium transition-colors ${
+                      activeSection === item.toLowerCase()
+                        ? darkMode 
+                          ? 'text-blue-400 bg-blue-900/30' 
+                          : 'text-blue-600 bg-blue-50'
+                        : darkMode
+                          ? 'text-gray-300 hover:text-blue-400 hover:bg-gray-800'
+                          : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
                     }`}
                   >
                     {item}
                   </button>
                 ))}
               </div>
-            </div>
-          </div>
+            </motion.div>
+          )}
         </div>
       </nav>
 
       {/* Hero Section */}
       <section id="hero" className="pt-16">
-        <HeroSection />
+        <HeroSection darkMode={darkMode} />
       </section>
 
       {/* About Section */}
       <motion.section 
         id="about" 
-        className="py-20 bg-gray-50"
+        className={`py-12 md:py-20 transition-colors ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">About Me</h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto mb-8"></div>
+          <motion.div variants={itemVariants} className="text-center mb-12 md:mb-16">
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              About Me
+            </h2>
+            <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
           </motion.div>
           
-          <motion.div variants={itemVariants} className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
+          <motion.div variants={itemVariants} className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div className="order-2 lg:order-1">
               <img 
                 src={portfolioData.personal.image} 
                 alt="Veeresh H P"
-                className="w-full max-w-md mx-auto rounded-2xl shadow-2xl"
+                className="w-full max-w-sm md:max-w-md mx-auto rounded-2xl shadow-2xl"
               />
             </div>
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-gray-900">
+            <div className="space-y-6 order-1 lg:order-2">
+              <h3 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 {portfolioData.personal.title}
               </h3>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className={`text-lg leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                 {portfolioData.personal.description}
               </p>
               <div className="space-y-3">
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <Mail className="w-5 h-5 text-blue-600" />
-                  <span>{portfolioData.personal.email}</span>
+                <div className={`flex items-center space-x-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <Mail className="w-5 h-5 text-blue-500" />
+                  <span className="text-sm sm:text-base">{portfolioData.personal.email}</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <Phone className="w-5 h-5 text-blue-600" />
-                  <span>{portfolioData.personal.phone}</span>
+                <div className={`flex items-center space-x-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <Phone className="w-5 h-5 text-blue-500" />
+                  <span className="text-sm sm:text-base">{portfolioData.personal.phone}</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <MapPin className="w-5 h-5 text-blue-600" />
-                  <span>{portfolioData.personal.location}</span>
+                <div className={`flex items-center space-x-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <MapPin className="w-5 h-5 text-blue-500" />
+                  <span className="text-sm sm:text-base">{portfolioData.personal.location}</span>
                 </div>
               </div>
-              <div className="flex space-x-4 pt-4">
-                <Button variant="outline" size="sm">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                <Button variant="outline" size="sm" className={`${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : ''}`}>
                   <Download className="w-4 h-4 mr-2" />
                   Download Resume
                 </Button>
-                <Button variant="outline" size="sm">
-                  <Github className="w-4 h-4 mr-2" />
-                  GitHub
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Linkedin className="w-4 h-4 mr-2" />
-                  LinkedIn
-                </Button>
+                <div className="flex gap-3">
+                  <Button variant="outline" size="sm" className={`${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : ''}`}>
+                    <Github className="w-4 h-4 mr-2" />
+                    GitHub
+                  </Button>
+                  <Button variant="outline" size="sm" className={`${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : ''}`}>
+                    <Linkedin className="w-4 h-4 mr-2" />
+                    LinkedIn
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -172,25 +253,27 @@ const HomePage = () => {
       {/* Projects Section */}
       <motion.section 
         id="projects" 
-        className="py-20"
+        className={`py-12 md:py-20 transition-colors ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Featured Projects</h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto mb-8"></div>
+          <motion.div variants={itemVariants} className="text-center mb-12 md:mb-16">
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              Featured Projects
+            </h2>
+            <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
           </motion.div>
           
           <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
             variants={containerVariants}
           >
             {portfolioData.projects.map((project) => (
               <motion.div key={project.id} variants={itemVariants}>
-                <ProjectCard project={project} />
+                <ProjectCard project={project} darkMode={darkMode} />
               </motion.div>
             ))}
           </motion.div>
@@ -198,27 +281,27 @@ const HomePage = () => {
       </motion.section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 bg-gray-50">
-        <SkillsSection />
+      <section id="skills" className={`py-12 md:py-20 transition-colors ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
+        <SkillsSection darkMode={darkMode} />
       </section>
 
       {/* Education Section */}
-      <section id="education" className="py-20">
-        <EducationSection />
+      <section id="education" className={`py-12 md:py-20 transition-colors ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <EducationSection darkMode={darkMode} />
       </section>
 
       {/* Certifications Section */}
-      <section id="certifications" className="py-20 bg-gray-50">
-        <CertificationsSection />
+      <section id="certifications" className={`py-12 md:py-20 transition-colors ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
+        <CertificationsSection darkMode={darkMode} />
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20">
-        <ContactSection />
+      <section id="contact" className={`py-12 md:py-20 transition-colors ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <ContactSection darkMode={darkMode} />
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className={`py-12 transition-colors ${darkMode ? 'bg-black text-white border-t border-gray-800' : 'bg-gray-900 text-white'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-4">Veeresh H P</h3>
