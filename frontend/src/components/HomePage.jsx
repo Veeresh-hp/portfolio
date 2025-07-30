@@ -200,15 +200,8 @@ const HomePage = () => {
             <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
           </motion.div>
           
-          <motion.div variants={itemVariants} className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div className="order-2 lg:order-1">
-              <img 
-                src={portfolioData.personal.image} 
-                alt="Veeresh H P"
-                className="w-full max-w-sm md:max-w-md mx-auto rounded-2xl shadow-2xl"
-              />
-            </div>
-            <div className="space-y-6 order-1 lg:order-2">
+          <motion.div variants={itemVariants} className="max-w-4xl mx-auto">
+            <div className="space-y-6">
               <h3 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 {portfolioData.personal.title}
               </h3>
