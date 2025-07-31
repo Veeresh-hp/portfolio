@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Modern Sliding Widget</title>
+        <title>Veeresh H P | Portfolio</title>
         <style>
             /* Basic page styling to match homepage */
             body {
@@ -35,14 +35,13 @@
                 justify-content: center;
                 width: 48px;
                 height: 80px;
-                /* Updated to match button gradient */
-                background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 25%, #db2777 75%, #f59e0b 100%);
-                background-size: 200% 200%;
-                animation: gradient-flow 8s ease infinite;
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                /* Transparent background with blur */
+                background: rgba(31, 41, 55, 0.5);
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
                 border-right: none;
                 border-radius: 12px 0 0 12px;
-                box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.15);
+                box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.2);
                 cursor: pointer;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 position: relative;
@@ -50,8 +49,9 @@
             }
             
             #widget-handle:hover {
+                background: rgba(55, 65, 81, 0.6);
                 transform: translateX(-2px);
-                box-shadow: -6px 6px 25px rgba(0, 0, 0, 0.2);
+                box-shadow: -6px 6px 25px rgba(0, 0, 0, 0.25);
             }
             
             #widget-handle svg {
@@ -73,7 +73,7 @@
                     0 8px 25px rgba(0, 0, 0, 0.25),
                     0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
                 border: 1px solid rgba(255, 255, 255, 0.2) !important;
-                backdrop-filter: blur(10px);
+                backdrop-filter: blur(12px);
                 
                 /* Hide the button off-screen to the right by default */
                 transform: translateX(100%);
@@ -83,8 +83,8 @@
                 /* Smooth modern transitions */
                 transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 
-                /* Modern gradient matching homepage theme */
-                background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 25%, #db2777 75%, #f59e0b 100%);
+                /* Transparent gradient matching homepage theme */
+                background: linear-gradient(135deg, rgba(79, 70, 229, 0.5) 0%, rgba(124, 58, 237, 0.5) 25%, rgba(219, 39, 119, 0.5) 75%, rgba(245, 158, 11, 0.5) 100%);
                 background-size: 200% 200%;
                 animation: gradient-flow 8s ease infinite;
                 position: relative;
@@ -99,7 +99,7 @@
                 left: -100%;
                 width: 100%;
                 height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
                 transition: left 0.6s ease;
             }
 
@@ -117,7 +117,7 @@
             /* Rotate and color change for handle icon when open */
             #ai-tools-widget.is-open #widget-handle svg {
                 transform: rotate(180deg);
-                stroke: #4f46e5;
+                stroke: #a5b4fc; /* Lighter color for open state */
             }
             
             /* Modern gradient animation */
@@ -185,7 +185,7 @@
         <div id="ai-tools-widget">
             <!-- Modern pull handle with star icon -->
             <div id="widget-handle" role="button" tabindex="0" aria-label="Toggle AI Tools widget">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e5e7eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
                 </svg>
             </div>
@@ -201,29 +201,17 @@
         </div>
 
         <script>
-            // Corrected and simplified JavaScript for smooth interactions
+            // JavaScript for hover-based interactions
             const widget = document.getElementById('ai-tools-widget');
-            const handle = document.getElementById('widget-handle');
 
-            const toggleWidget = () => {
-                widget.classList.toggle('is-open');
-            };
-
-            handle.addEventListener('click', toggleWidget);
-
-            // Keyboard accessibility
-            handle.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    toggleWidget();
-                }
+            // Open the widget on mouse enter
+            widget.addEventListener('mouseenter', () => {
+                widget.classList.add('is-open');
             });
 
-            // Auto-close when clicking outside the widget
-            document.addEventListener('click', (event) => {
-                if (!widget.contains(event.target) && widget.classList.contains('is-open')) {
-                    widget.classList.remove('is-open');
-                }
+            // Close the widget on mouse leave
+            widget.addEventListener('mouseleave', () => {
+                widget.classList.remove('is-open');
             });
         </script>
         

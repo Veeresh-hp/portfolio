@@ -198,8 +198,7 @@ const HomePage = () => {
               </p>
               
               <div className="flex justify-center pt-4">
-                {/* --- MODIFIED LINK BEHAVIOR --- */}
-                {/* This link now opens the PDF in a new tab for viewing */}
+                {/* --- CORRECTED FILE PATH --- */}
                 <a href="/resume/Veeresh_H_P_Resume.pdf" target="_blank" rel="noopener noreferrer">
                     <Button 
                         variant="outline" 
