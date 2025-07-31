@@ -140,13 +140,13 @@ const HeroSection = ({ darkMode = true }) => {
             
             {/* Social Links - NEWLY ADDED */}
             <motion.div variants={itemVariants} className="flex justify-center items-center gap-4">
-                <a href={portfolioData.socialLinks.github} target="_blank" rel="noopener noreferrer">
+                <a href = "https://github.com/Veeresh-hp" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className={`transition-colors ${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                         <Github className="w-5 h-5 mr-2" />
                         GitHub
                     </Button>
                 </a>
-                <a href={portfolioData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
+                <a href="https://www.linkedin.com/in/veereshhp" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className={`transition-colors ${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                         <Linkedin className="w-5 h-5 mr-2" />
                         LinkedIn

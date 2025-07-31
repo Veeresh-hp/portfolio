@@ -3,103 +3,297 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Interactive Button Example</title>
+        <title>Modern Sliding Widget</title>
         <style>
-            /* Basic page styling */
+            /* Basic page styling to match homepage */
             body {
-                background-color: #111827; /* Dark background to see the button clearly */
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
-                    sans-serif;
+                background-color: #111827; /* Fallback background */
+                background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
             }
 
-            /* Keyframes for the animated gradient background */
-            @keyframes gradient-animation {
-                0% {
-                    background-position: 0% 50%;
-                }
-                50% {
-                    background-position: 100% 50%;
-                }
-                100% {
-                    background-position: 0% 50%;
-                }
+            /* --- MODERN WIDGET CONTAINER --- */
+            #ai-tools-widget {
+                position: fixed;
+                top: 50%;
+                right: 0;
+                transform: translateY(-50%);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                flex-direction: row-reverse;
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            /* Styling for the link element */
+            /* --- MODERN PULL HANDLE --- */
+            #widget-handle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 48px;
+                height: 80px;
+                /* Updated to match button gradient */
+                background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 25%, #db2777 75%, #f59e0b 100%);
+                background-size: 200% 200%;
+                animation: gradient-flow 8s ease infinite;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-right: none;
+                border-radius: 12px 0 0 12px;
+                box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.15);
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                overflow: hidden;
+            }
+            
+            #widget-handle:hover {
+                transform: translateX(-2px);
+                box-shadow: -6px 6px 25px rgba(0, 0, 0, 0.2);
+            }
+            
+            #widget-handle svg {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1;
+                position: relative;
+            }
+
+            /* --- MODERN SLIDING BUTTON --- */
             #myalltools {
-                /* Positioning */
-                position: fixed !important;
-                bottom: 20px;
-                right: 20px;
-                z-index: 9999 !important;
-
-                /* Box Model & Display */
                 display: flex !important;
                 align-items: center !important;
-                padding: 8px 14px;
-                
-                /* Typography */
+                padding: 12px 20px;
                 text-decoration: none;
-                font-size: 12px !important;
+                font-size: 14px !important;
                 font-weight: 600;
-
-                /* Appearance */
-                border-radius: 10px !important;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+                border-radius: 12px !important;
+                box-shadow: 
+                    0 8px 25px rgba(0, 0, 0, 0.25),
+                    0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
                 border: 1px solid rgba(255, 255, 255, 0.2) !important;
-
-                /* --- ANIMATION & INTERACTION --- */
-
-                /* 1. Define a large gradient background */
-                background: linear-gradient(
-                    45deg,
-                    #4f46e5,
-                    #7c3aed,
-                    #db2777,
-                    #f59e0b
-                );
-                background-size: 300% 300%; /* Make the gradient larger than the button */
-
-                /* 2. Apply the keyframe animation */
-                animation: gradient-animation 10s ease infinite;
-
-                /* 3. Add a smooth transition for hover effects */
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                backdrop-filter: blur(10px);
+                
+                /* Hide the button off-screen to the right by default */
+                transform: translateX(100%);
+                opacity: 0;
+                visibility: hidden;
+                
+                /* Smooth modern transitions */
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                
+                /* Modern gradient matching homepage theme */
+                background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 25%, #db2777 75%, #f59e0b 100%);
+                background-size: 200% 200%;
+                animation: gradient-flow 8s ease infinite;
+                position: relative;
+                overflow: hidden;
             }
 
-            /* Hover effect for motion */
+            /* Subtle shine effect on button */
+            #myalltools::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                transition: left 0.6s ease;
+            }
+
+            #myalltools:hover::before {
+                left: 100%;
+            }
+
+            /* --- OPEN STATE --- */
+            #ai-tools-widget.is-open #myalltools {
+                transform: translateX(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Rotate and color change for handle icon when open */
+            #ai-tools-widget.is-open #widget-handle svg {
+                transform: rotate(180deg);
+                stroke: #4f46e5;
+            }
+            
+            /* Modern gradient animation */
+            @keyframes gradient-flow {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
             #myalltools:hover {
-                transform: scale(1.05) translateY(-5px); /* Scale up and move up */
-                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important; /* Enhance shadow */
+                transform: translateY(-2px) scale(1.02);
+                box-shadow: 
+                    0 12px 35px rgba(0, 0, 0, 0.3),
+                    0 0 0 1px rgba(255, 255, 255, 0.2) inset !important;
             }
 
-            /* Styling for the text inside the button */
+            #myalltools:active {
+                transform: translateY(0) scale(0.98);
+            }
+
             #myalltools p {
-                color: #ffffff; /* White text for better contrast */
+                color: #ffffff;
                 margin: 0;
-                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+                font-weight: 600;
+                letter-spacing: 0.025em;
+                z-index: 1;
+                position: relative;
             }
 
-            /* Styling for the logo image */
             #myalltools img {
-                width: 20px;
-                height: 20px;
-                margin-right: 8px;
+                width: 24px;
+                height: 24px;
+                margin-right: 12px;
+                border-radius: 4px;
+                z-index: 1;
+                position: relative;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                #widget-handle {
+                    width: 44px;
+                    height: 70px;
+                }
+                
+                #myalltools {
+                    padding: 10px 16px;
+                    font-size: 13px !important;
+                }
+                
+                #myalltools img {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                }
             }
         </style>
     </head>
     <body>
-        <!-- Your React app root -->
+        <!-- This is where your React app will be mounted -->
         <div id="root"></div>
 
-        <!-- The interactive button -->
-        <a id="myalltools" target="_blank" href="https://myalltools.vercel.app">
-            <div style="display: flex; flex-direction: row; align-items: center">
-                <!-- Make sure you have logo.png in your public folder -->
-                <img src="%PUBLIC_URL%/logo.png" alt="Logo" />
-                <p>Visit MY Ai TOOLS</p>
+        <!-- The modern widget container -->
+        <div id="ai-tools-widget">
+            <!-- Modern pull handle with star icon -->
+            <div id="widget-handle" role="button" tabindex="0" aria-label="Toggle AI Tools widget">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                </svg>
             </div>
-        </a>
+
+            <!-- The modern sliding button -->
+            <a id="myalltools" target="_blank" href="https://myalltools.vercel.app">
+                <div style="display: flex; flex-direction: row; align-items: center">
+                    <!-- This variable is replaced by React's build process -->
+                    <img src="%PUBLIC_URL%/logo.png" alt="AI Tools Logo" />
+                    <p>Visit MY AI TOOLS</p>
+                </div>
+            </a>
+        </div>
+
+        <script>
+            // Corrected and simplified JavaScript for smooth interactions
+            const widget = document.getElementById('ai-tools-widget');
+            const handle = document.getElementById('widget-handle');
+
+            const toggleWidget = () => {
+                widget.classList.toggle('is-open');
+            };
+
+            handle.addEventListener('click', toggleWidget);
+
+            // Keyboard accessibility
+            handle.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleWidget();
+                }
+            });
+
+            // Auto-close when clicking outside the widget
+            document.addEventListener('click', (event) => {
+                if (!widget.contains(event.target) && widget.classList.contains('is-open')) {
+                    widget.classList.remove('is-open');
+                }
+            });
+        </script>
+        
+        <!-- PostHog Analytics Snippet -->
+        <script>
+            !(function (t, e) {
+                var o, n, p, r;
+                e.__SV ||
+                    ((window.posthog = e),
+                    (e._i = []),
+                    (e.init = function (i, s, a) {
+                        function g(t, e) {
+                            var o = e.split(".");
+                            2 == o.length && ((t = t[o[0]]), (e = o[1])),
+                                (t[e] = function () {
+                                    t.push(
+                                        [e].concat(
+                                            Array.prototype.slice.call(
+                                                arguments,
+                                                0,
+                                            ),
+                                        ),
+                                    );
+                                });
+                        }
+                        ((p = t.createElement("script")).type =
+                            "text/javascript"),
+                            (p.crossOrigin = "anonymous"),
+                            (p.async = !0),
+                            (p.src =
+                                s.api_host.replace(
+                                    ".i.posthog.com",
+                                    "-assets.i.posthog.com",
+                                ) + "/static/array.js"),
+                            (r =
+                                t.getElementsByTagName(
+                                    "script",
+                                )[0]).parentNode.insertBefore(p, r);
+                        var u = e;
+                        for (
+                            void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+                                u.people = u.people || [],
+                                u.toString = function (t) {
+                                    var e = "posthog";
+                                    return (
+                                        "posthog" !== a && (e += "." + a),
+                                        t || (e += " (stub)"),
+                                        e
+                                    );
+                                },
+                                u.people.toString = function () {
+                                    return u.toString(1) + ".people (stub)";
+                                },
+                                o =
+                                    "init me ws ys ps bs capture je Di ks register register_once register_for_session unregister unregister_for_session Ps getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty Es $s createPersonProfile Is opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing Ss debug xs getPageViewId captureTraceFeedback captureTraceMetric".split(
+                                        " ",
+                                    ),
+                                n = 0;
+                            n < o.length;
+                            n++
+                        )
+                            g(u, o[n]);
+                        e._i.push([i, s, a]);
+                    }),
+                    (e.__SV = 1));
+            })(document, window.posthog || []);
+            posthog.init("phc_yJW1VjHGGwmCbbrtczfqqNxgBDbhlhOWcdzcIJEOTFE", {
+                api_host: "https://us.i.posthog.com",
+                person_profiles: "identified_only", // or 'always'
+            });
+        </script>
     </body>
 </html>
