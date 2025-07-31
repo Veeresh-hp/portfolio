@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Github, Linkedin, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Github, Linkedin, MessageCircle, Sparkles } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -16,6 +16,7 @@ const ContactSection = ({ darkMode = true }) => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false); // State for AI message generation
   const { toast } = useToast();
 
   const containerVariants = {
@@ -53,6 +54,63 @@ const ContactSection = ({ darkMode = true }) => {
     }));
   };
 
+  // --- Gemini API Integration ---
+  const handleGenerateMessage = async () => {
+    if (!formData.name || !formData.subject) {
+      toast({
+        title: "Info Needed",
+        description: "Please enter your name and a subject first.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setIsGenerating(true);
+    
+    const prompt = `You are a professional communication assistant. Write a friendly and concise message for a portfolio contact form. The sender's name is "${formData.name}" and the subject of the message is "${formData.subject}". The message should express genuine interest in connecting or discussing the subject. Keep it under 50 words.`;
+
+    try {
+        let chatHistory = [];
+        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+        const payload = { contents: chatHistory };
+        const apiKey = "" // API key is handled by the environment
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.candidates && result.candidates.length > 0 &&
+            result.candidates[0].content && result.candidates[0].content.parts &&
+            result.candidates[0].content.parts.length > 0) {
+          const text = result.candidates[0].content.parts[0].text;
+          setFormData(prev => ({ ...prev, message: text.trim() }));
+          toast({
+            title: "Message Drafted!",
+            description: "An AI-powered message has been generated for you.",
+          });
+        } else {
+          throw new Error("Invalid response structure from API.");
+        }
+    } catch (error) {
+        console.error("Gemini API call failed:", error);
+        toast({
+            title: "Error",
+            description: "Could not generate a message. Please try again.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsGenerating(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -87,8 +145,9 @@ const ContactSection = ({ darkMode = true }) => {
       </motion.div>
 
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-        {/* Contact Information */}
-        <motion.div variants={itemVariants} className="space-y-6 sm:space-y-8">
+        {/* Left Column */}
+        <motion.div variants={itemVariants} className="flex flex-col gap-8">
+          {/* Contact Information Card */}
           <Card className={`p-4 sm:p-6 border-2 transition-colors ${
             darkMode 
               ? 'bg-gradient-to-br from-blue-900/20 to-purple-900/20 border-blue-800/50' 
@@ -98,45 +157,46 @@ const ContactSection = ({ darkMode = true }) => {
               Contact Information
             </h3>
             <div className="space-y-4">
+              <a href={`mailto:${portfolioData.personal.email}`} className="block">
+                <motion.div 
+                  className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
+                    darkMode ? 'bg-gray-800/50' : 'bg-white'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="p-2 sm:p-3 bg-blue-600 rounded-lg mr-3 sm:mr-4">
+                    <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Email</h4>
+                    <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      {portfolioData.personal.email}
+                    </p>
+                  </div>
+                </motion.div>
+              </a>
+              <a href={`tel:${portfolioData.personal.phone}`} className="block">
+                <motion.div 
+                  className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
+                    darkMode ? 'bg-gray-800/50' : 'bg-white'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="p-2 sm:p-3 bg-green-600 rounded-lg mr-3 sm:mr-4">
+                    <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Phone</h4>
+                    <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      {portfolioData.personal.phone}
+                    </p>
+                  </div>
+                </motion.div>
+              </a>
               <motion.div 
-                className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
+                className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm ${
                   darkMode ? 'bg-gray-800/50' : 'bg-white'
                 }`}
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="p-2 sm:p-3 bg-blue-600 rounded-lg mr-3 sm:mr-4">
-                  <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Email</h4>
-                  <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {portfolioData.personal.email}
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
-                  darkMode ? 'bg-gray-800/50' : 'bg-white'
-                }`}
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="p-2 sm:p-3 bg-green-600 rounded-lg mr-3 sm:mr-4">
-                  <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Phone</h4>
-                  <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {portfolioData.personal.phone}
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
-                  darkMode ? 'bg-gray-800/50' : 'bg-white'
-                }`}
-                whileHover={{ scale: 1.02 }}
               >
                 <div className="p-2 sm:p-3 bg-purple-600 rounded-lg mr-3 sm:mr-4">
                   <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -151,7 +211,7 @@ const ContactSection = ({ darkMode = true }) => {
             </div>
           </Card>
 
-          {/* Social Links */}
+          {/* Social Links Card */}
           <Card className={`p-4 sm:p-6 transition-colors ${
             darkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
           }`}>
@@ -159,53 +219,29 @@ const ContactSection = ({ darkMode = true }) => {
               Connect With Me
             </h3>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="outline" size="lg" className={`w-full sm:w-auto text-white border-gray-900 transition-colors ${
-                  darkMode ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-900 hover:bg-gray-800'
-                }`}>
-                  <Github className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                  GitHub
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="outline" size="lg" className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 border-blue-600">
-                  <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                  LinkedIn
-                </Button>
-              </motion.div>
-            </div>
-          </Card>
-
-          {/* Quick Contact */}
-          <Card className={`p-4 sm:p-6 border-2 transition-colors ${
-            darkMode 
-              ? 'bg-gradient-to-br from-green-900/20 to-blue-900/20 border-green-800/50' 
-              : 'bg-gradient-to-br from-green-50 to-blue-50 border-green-200'
-          }`}>
-            <h3 className={`text-lg sm:text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Quick Contact
-            </h3>
-            <p className={`mb-4 text-sm sm:text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Prefer a direct approach? Feel free to reach out via email or phone for immediate assistance.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
-                <Mail className="w-4 h-4 mr-2" />
-                Send Email
-              </Button>
-              <Button variant="outline" className={`transition-colors ${
-                darkMode 
-                  ? 'border-green-600 text-green-400 hover:bg-green-900/20' 
-                  : 'border-green-600 text-green-600 hover:bg-green-50'
-              }`}>
-                <Phone className="w-4 h-4 mr-2" />
-                Call Now
-              </Button>
+              <a href = "https://github.com/Veeresh-hp" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
+                  <Button variant="outline" size="lg" className={`w-full text-white border-gray-900 transition-colors ${
+                    darkMode ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-900 hover:bg-gray-800'
+                  }`}>
+                    <Github className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    GitHub
+                  </Button>
+                </motion.div>
+              </a>
+              <a href= "https://www.linkedin.com/in/veereshhp" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
+                  <Button variant="outline" size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700 border-blue-600">
+                    <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    LinkedIn
+                  </Button>
+                </motion.div>
+              </a>
             </div>
           </Card>
         </motion.div>
 
-        {/* Contact Form */}
+        {/* Contact Form (Right Column) */}
         <motion.div variants={itemVariants}>
           <Card className={`p-4 sm:p-6 h-full transition-colors ${
             darkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
@@ -225,18 +261,7 @@ const ContactSection = ({ darkMode = true }) => {
                   }`}>
                     Full Name
                   </label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className={`w-full ${
-                      darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''
-                    }`}
-                    placeholder="Your full name"
-                  />
+                  <Input id="name" name="name" type="text" value={formData.name} onChange={handleInputChange} required className={`w-full ${darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''}`} placeholder="Your full name" />
                 </div>
                 <div>
                   <label htmlFor="email" className={`block text-sm font-medium mb-2 ${
@@ -244,18 +269,7 @@ const ContactSection = ({ darkMode = true }) => {
                   }`}>
                     Email Address
                   </label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className={`w-full ${
-                      darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''
-                    }`}
-                    placeholder="your.email@example.com"
-                  />
+                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required className={`w-full ${darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''}`} placeholder="your.email@example.com" />
                 </div>
               </div>
 
@@ -265,38 +279,37 @@ const ContactSection = ({ darkMode = true }) => {
                 }`}>
                   Subject
                 </label>
-                <Input
-                  id="subject"
-                  name="subject"
-                  type="text"
-                  value={formData.subject}
-                  onChange={handleInputChange}
-                  required
-                  className={`w-full ${
-                    darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''
-                  }`}
-                  placeholder="What's this about?"
-                />
+                <Input id="subject" name="subject" type="text" value={formData.subject} onChange={handleInputChange} required className={`w-full ${darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''}`} placeholder="What's this about?" />
               </div>
 
-              <div>
-                <label htmlFor="message" className={`block text-sm font-medium mb-2 ${
-                  darkMode ? 'text-gray-300' : 'text-gray-700'
-                }`}>
-                  Message
-                </label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  required
-                  rows={6}
-                  className={`w-full resize-none ${
-                    darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''
-                  }`}
-                  placeholder="Tell me about your project, question, or just say hello!"
-                />
+              {/* --- MODIFIED MESSAGE AREA --- */}
+              <div className="relative">
+                <div className="flex justify-between items-center mb-2">
+                    <label htmlFor="message" className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Message
+                    </label>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleGenerateMessage}
+                        disabled={isGenerating}
+                        className={`text-xs ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}`}
+                    >
+                        {isGenerating ? (
+                            <>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-2"></div>
+                                Drafting...
+                            </>
+                        ) : (
+                            <>
+                                <Sparkles className="w-3 h-3 mr-2" />
+                                Help me write
+                            </>
+                        )}
+                    </Button>
+                </div>
+                <Textarea id="message" name="message" value={formData.message} onChange={handleInputChange} required rows={6} className={`w-full resize-none ${darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''}`} placeholder="Tell me about your project, question, or just say hello!" />
               </div>
 
               <Button 

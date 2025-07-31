@@ -21,7 +21,7 @@ export const portfolioData = {
       institution: "SJB Institute of Technology",
       location: "Bengaluru",
       score: "CGPA: 7.9",
-      year: "2021-2025",
+      year: "2022-2026",
       status: "ongoing"
     },
     {
@@ -30,7 +30,7 @@ export const portfolioData = {
       institution: "Sri Vyshnavi Chetana PU College",
       location: "Davanagere",
       score: "76.67%",
-      year: "2019-2021",
+      year: "2020-2022",
       status: "completed"
     },
     {
@@ -39,7 +39,7 @@ export const portfolioData = {
       institution: "B E A High School",
       location: "Davanagere",
       score: "89.6%",
-      year: "2019",
+      year: "2020",
       status: "completed"
     }
   ],
@@ -115,7 +115,7 @@ export const portfolioData = {
       id: 2,
       name: "Database Management Systems",
       issuer: "SWAYAM",
-      year: "2023",
+      year: "2024",
       type: "database",
       // Corrected to match the uploaded file exactly
       link: "/certificates/DBMS_Certificate.pdf"
@@ -124,7 +124,7 @@ export const portfolioData = {
       id: 3,
       name: "Programming in Java",
       issuer: "SWAYAM",
-      year: "2023",
+      year: "2024",
       type: "programming",
       // Corrected to match the uploaded file exactly
       link: "/certificates/Java_Certificate.pdf"
@@ -133,7 +133,7 @@ export const portfolioData = {
       id: 4,
       name: "Postman API Fundamentals – Student Expert Certification",
       issuer: "Postman",
-      year: "2023",
+      year: "2025",
       type: "api",
       // Corrected to match the uploaded file `POSTMAN_Certificate.pdf` exactly
       link: "/certificates/POSTMAN_Certificate.pdf"
@@ -142,7 +142,7 @@ export const portfolioData = {
       id: 5,
       name: "Basics of Operating Systems",
       issuer: "Cisco Networking Academy",
-      year: "2023",
+      year: "2025",
       type: "systems",
       // Corrected to match the uploaded file exactly
       link: "/certificates/OS_BASICS_Certificate.pdf"

@@ -243,7 +243,7 @@ const CertificationsSection = ({ darkMode = true }) => {
                 <h4 className={`text-sm sm:text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>
                   Recent Year
                 </h4>
-                <p className="text-2xl sm:text-3xl font-bold text-orange-500">2023</p>
+                <p className="text-2xl sm:text-3xl font-bold text-orange-500">2025</p>
               </div>
             </div>
           </div>
