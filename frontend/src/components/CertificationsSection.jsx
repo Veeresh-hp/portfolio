@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 import portfolioData from '../mock';
 
 const CertificationsSection = ({ darkMode = true }) => {
+  // Animation variants for the container and its items
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -34,6 +35,7 @@ const CertificationsSection = ({ darkMode = true }) => {
     },
   };
 
+  // Helper function to determine badge color based on certificate type and theme
   const getTypeColor = (type) => {
     if (darkMode) {
       switch (type) {
@@ -64,6 +66,7 @@ const CertificationsSection = ({ darkMode = true }) => {
     }
   };
 
+  // Helper function to select an icon based on certificate type
   const getTypeIcon = (type) => {
     const iconClass = "w-6 h-6 sm:w-8 sm:h-8 text-white";
     switch (type) {
@@ -80,6 +83,7 @@ const CertificationsSection = ({ darkMode = true }) => {
     }
   };
 
+  // Helper function to get a background gradient for the icon container
   const getBgGradient = (type) => {
     switch (type) {
       case 'programming':
@@ -103,16 +107,18 @@ const CertificationsSection = ({ darkMode = true }) => {
       whileInView="visible"
       viewport={{ once: true }}
     >
+      {/* Section Header */}
       <motion.div variants={itemVariants} className="text-center mb-12 md:mb-16">
         <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
           Certifications
         </h2>
         <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
         <p className={`text-lg max-w-2xl mx-auto px-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          Professional certifications and learning achievements that validate my technical expertise
+          Professional certifications and learning achievements that validate my technical expertise.
         </p>
       </motion.div>
 
+      {/* Grid of Certification Cards */}
       <motion.div 
         className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12"
         variants={containerVariants}
@@ -132,7 +138,7 @@ const CertificationsSection = ({ darkMode = true }) => {
                   : 'bg-white border-gray-200 hover:border-blue-300'
               }`}>
                 <div className="p-4 sm:p-6 flex flex-col h-full">
-                  {/* Header with Icon */}
+                  {/* Card Header with Icon and Badge */}
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
                     <div className={`p-2 sm:p-3 rounded-lg bg-gradient-to-r ${getBgGradient(cert.type)} mb-3 sm:mb-0 w-fit`}>
                       {getTypeIcon(cert.type)}
@@ -142,7 +148,7 @@ const CertificationsSection = ({ darkMode = true }) => {
                     </Badge>
                   </div>
 
-                  {/* Content */}
+                  {/* Card Content */}
                   <div className="flex-grow">
                     <h3 className={`text-base sm:text-lg font-bold mb-3 leading-tight ${
                       darkMode ? 'text-white' : 'text-gray-900'
@@ -162,20 +168,22 @@ const CertificationsSection = ({ darkMode = true }) => {
                     </div>
                   </div>
 
-                  {/* Action Button */}
+                  {/* Action Button - Now a functional link */}
                   <div className="mt-auto">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className={`w-full text-xs sm:text-sm transition-colors ${
-                        darkMode 
-                          ? 'bg-gray-700/50 hover:bg-gray-600/50 border-gray-600 text-gray-300' 
-                          : 'bg-gray-50 hover:bg-gray-100 border-gray-300'
-                      }`}
-                    >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      View Certificate
-                    </Button>
+                    <a href={cert.link} target="_blank" rel="noopener noreferrer">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className={`w-full text-xs sm:text-sm transition-colors ${
+                          darkMode 
+                            ? 'bg-gray-700/50 hover:bg-gray-600/50 border-gray-600 text-gray-300' 
+                            : 'bg-gray-50 hover:bg-gray-100 border-gray-300'
+                        }`}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        View Certificate
+                      </Button>
+                    </a>
                   </div>
                 </div>
               </Card>
@@ -184,7 +192,7 @@ const CertificationsSection = ({ darkMode = true }) => {
         ))}
       </motion.div>
 
-      {/* Certification Summary */}
+      {/* Certification Summary Card */}
       <motion.div variants={itemVariants}>
         <Card className={`border-2 transition-colors ${
           darkMode 

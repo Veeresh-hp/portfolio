@@ -223,10 +223,17 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <Button variant="outline" size="sm" className={`${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : ''}`}>
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Resume
-                </Button>
+                <Button 
+  variant="outline" 
+  size="sm" 
+  className={`${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : ''}`}
+>
+  <Download className="w-4 h-4 mr-2" />
+  <a href="/resume/Veeresh_H_P_Resume.pdf" target="_blank" rel="noopener noreferrer">
+    Download Resume
+  </a>
+</Button>
+
                 <div className="flex gap-3">
                   <Button variant="outline" size="sm" className={`${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : ''}`}>
                     <Github className="w-4 h-4 mr-2" />

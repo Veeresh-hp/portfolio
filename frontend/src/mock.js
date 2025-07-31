@@ -1,4 +1,6 @@
 // Mock data for Veeresh H P Portfolio
+// This is the corrected version. Please replace your existing portfolioData object with this one.
+
 export const portfolioData = {
   personal: {
     name: "Veeresh H P",
@@ -105,35 +107,45 @@ export const portfolioData = {
       name: "The Joy of Computing Using Python",
       issuer: "SWAYAM",
       year: "2023",
-      type: "programming"
+      type: "programming",
+      // Corrected to match the uploaded file exactly
+      link: "/certificates/Python_Certificate.pdf"
     },
     {
       id: 2,
       name: "Database Management Systems",
       issuer: "SWAYAM",
       year: "2023",
-      type: "database"
+      type: "database",
+      // Corrected to match the uploaded file exactly
+      link: "/certificates/DBMS_Certificate.pdf"
     },
     {
       id: 3,
       name: "Programming in Java",
       issuer: "SWAYAM",
       year: "2023",
-      type: "programming"
+      type: "programming",
+      // Corrected to match the uploaded file exactly
+      link: "/certificates/Java_Certificate.pdf"
     },
     {
       id: 4,
       name: "Postman API Fundamentals – Student Expert Certification",
       issuer: "Postman",
       year: "2023",
-      type: "api"
+      type: "api",
+      // Corrected to match the uploaded file `POSTMAN_Certificate.pdf` exactly
+      link: "/certificates/POSTMAN_Certificate.pdf"
     },
     {
       id: 5,
       name: "Basics of Operating Systems",
       issuer: "Cisco Networking Academy",
       year: "2023",
-      type: "systems"
+      type: "systems",
+      // Corrected to match the uploaded file exactly
+      link: "/certificates/OS_BASICS_Certificate.pdf"
     }
   ],
 
