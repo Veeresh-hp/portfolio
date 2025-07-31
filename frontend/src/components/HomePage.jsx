@@ -199,7 +199,7 @@ const HomePage = () => {
               
               <div className="flex justify-center pt-4">
                 {/* --- CORRECTED FILE PATH --- */}
-                <a href="/resume/Veeresh_H_P_Resume.pdf" target="_blank" rel="noopener noreferrer">
+                <a href="/resume/veeresh_H_P_Resume.pdf" target="_blank" rel="noopener noreferrer">
                     <Button 
                         variant="outline" 
                         size="sm" 
