@@ -178,22 +178,17 @@
         </style>
     </head>
     <body>
-        <!-- This is where your React app will be mounted -->
         <div id="root"></div>
 
-        <!-- The modern widget container -->
         <div id="ai-tools-widget">
-            <!-- Modern pull handle with star icon -->
             <div id="widget-handle" role="button" tabindex="0" aria-label="Toggle AI Tools widget">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e5e7eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
                 </svg>
             </div>
 
-            <!-- The modern sliding button -->
             <a id="myalltools" target="_blank" href="https://myalltools.vercel.app">
                 <div style="display: flex; flex-direction: row; align-items: center">
-                    <!-- This variable is replaced by React's build process -->
                     <img src="%PUBLIC_URL%/logo.png" alt="AI Tools Logo" />
                     <p>Visit MY AI TOOLS</p>
                 </div>
@@ -201,21 +196,21 @@
         </div>
 
         <script>
-            // JavaScript for hover-based interactions
             const widget = document.getElementById('ai-tools-widget');
+            const handle = document.getElementById('widget-handle');
 
-            // Open the widget on mouse enter
-            widget.addEventListener('mouseenter', () => {
+            // Open the widget only when the mouse enters the HANDLE
+            handle.addEventListener('mouseenter', () => {
                 widget.classList.add('is-open');
             });
 
-            // Close the widget on mouse leave
+            // Close the widget when the mouse leaves the ENTIRE WIDGET AREA
+            // (This ensures it stays open when moving from the handle to the button)
             widget.addEventListener('mouseleave', () => {
                 widget.classList.remove('is-open');
             });
         </script>
         
-        <!-- PostHog Analytics Snippet -->
         <script>
             !(function (t, e) {
                 var o, n, p, r;
