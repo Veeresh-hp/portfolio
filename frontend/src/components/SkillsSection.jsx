@@ -1,11 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Database, Globe, Wrench, Users, Lightbulb } from 'lucide-react';
-import { Card } from './ui/card';
-import { Badge } from './ui/badge';
 import portfolioData from '../mock';
 
-const SkillsSection = ({ darkMode = true }) => {
+const SkillsSection = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -35,174 +33,166 @@ const SkillsSection = ({ darkMode = true }) => {
 
   const skillCategories = [
     {
-      title: "Programming Languages",
+      title: "Languages",
       icon: Code,
       skills: portfolioData.skills.languages,
-      color: "from-blue-500 to-blue-600",
-      bgColor: darkMode ? "bg-blue-900/20 border-blue-800/30" : "bg-blue-50"
+      color: "text-blue-400",
+      glow: "bg-blue-400/10"
     },
     {
-      title: "Frontend Technologies",
+      title: "Frontend",
       icon: Globe,
       skills: portfolioData.skills.frontend,
-      color: "from-green-500 to-green-600",
-      bgColor: darkMode ? "bg-green-900/20 border-green-800/30" : "bg-green-50"
+      color: "text-cyan-400",
+      glow: "bg-cyan-400/10"
     },
     {
-      title: "Frameworks",
+      title: "Backend",
       icon: Wrench,
       skills: portfolioData.skills.frameworks,
-      color: "from-purple-500 to-purple-600",
-      bgColor: darkMode ? "bg-purple-900/20 border-purple-800/30" : "bg-purple-50"
+      color: "text-indigo-400",
+      glow: "bg-indigo-400/10"
     },
     {
-      title: "Databases",
+      title: "Data",
       icon: Database,
       skills: portfolioData.skills.databases,
-      color: "from-orange-500 to-orange-600",
-      bgColor: darkMode ? "bg-orange-900/20 border-orange-800/30" : "bg-orange-50"
+      color: "text-emerald-400",
+      glow: "bg-emerald-400/10"
     },
     {
-      title: "Tools",
+      title: "Dev & Ops",
       icon: Wrench,
       skills: portfolioData.skills.tools,
-      color: "from-red-500 to-red-600",
-      bgColor: darkMode ? "bg-red-900/20 border-red-800/30" : "bg-red-50"
+      color: "text-orange-400",
+      glow: "bg-orange-400/10"
     },
     {
-      title: "Soft Skills",
+      title: "Professional",
       icon: Users,
       skills: portfolioData.skills.softSkills,
-      color: "from-pink-500 to-pink-600",
-      bgColor: darkMode ? "bg-pink-900/20 border-pink-800/30" : "bg-pink-50"
+      color: "text-pink-400",
+      glow: "bg-pink-400/10"
     }
   ];
 
+  const skillIcons = {
+    languages: Code,
+    frontend: Globe,
+    backend: Wrench,
+    databases: Database,
+    tools: Wrench,
+    softSkills: Users,
+  };
+
+  const skillColors = {
+    languages: "text-blue-400",
+    frontend: "text-cyan-400",
+    backend: "text-indigo-400",
+    databases: "text-emerald-400",
+    tools: "text-orange-400",
+    softSkills: "text-pink-400",
+  };
+
   return (
     <motion.div 
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
     >
-      <motion.div variants={itemVariants} className="text-center mb-12 md:mb-16">
-        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-          Skills & Technologies
+      {/* Background Signature Glow */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/10 rounded-full blur-[100px] -z-10 animate-pulse-slow"></div>
+
+      <motion.div variants={itemVariants} className="flex flex-col items-center mb-12 sm:mb-20">
+        <h2 className="text-4xl md:text-5xl font-black mb-4 text-white text-center">
+          Expertise & Stack
         </h2>
-        <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
-        <p className={`text-lg max-w-2xl mx-auto px-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          A comprehensive overview of my technical skills and the technologies I work with
+        <div className="w-12 h-1.5 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full mb-8"></div>
+        <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto text-center font-medium px-4">
+          A deep dive into the technical ecosystem I leverage to build state-of-the-art digital assets.
         </p>
       </motion.div>
 
-      <motion.div 
-        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
-        variants={containerVariants}
-      >
-        {skillCategories.map((category, index) => (
-          <motion.div key={index} variants={itemVariants}>
-            <Card className={`h-full ${category.bgColor} border-2 hover:shadow-lg transition-all duration-300 ${
-              darkMode ? 'hover:shadow-blue-500/20' : ''
-            }`}>
-              <div className="p-4 sm:p-6">
-                <div className="flex items-center mb-4">
-                  <div className={`p-2 sm:p-3 rounded-lg bg-gradient-to-r ${category.color} mr-3 sm:mr-4`}>
-                    <category.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-24">
+        {Object.entries(portfolioData.skills).map(([category, items], index) => {
+          const Icon = skillIcons[category] || Wrench;
+          return (
+            <motion.div
+              key={category}
+              variants={itemVariants}
+              className="group"
+            >
+              <div className="glass-panel-compact rounded-[2rem] p-6 h-full transition-all duration-500 hover:bg-white/5 hover:border-white/20 group">
+                <div className="flex items-center gap-4 mb-6 sm:mb-8">
+                  <div className={`p-3 sm:p-4 rounded-2xl bg-white/5 ${skillColors[category]} transition-transform duration-500 group-hover:scale-110`}>
+                    <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
                   </div>
-                  <h3 className={`text-lg sm:text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                    {category.title}
-                  </h3>
+                  <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-widest">{category}</h3>
                 </div>
-                <div className="space-y-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <motion.div
-                      key={skillIndex}
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                
+                <div className="flex flex-wrap gap-2 sm:gap-3">
+                  {items.map((skill, i) => (
+                    <span 
+                      key={i} 
+                      className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-white/5 border border-white/5 text-[10px] sm:text-xs font-bold text-gray-300 transition-all hover:bg-emerald-500 hover:text-white"
                     >
-                      <Badge 
-                        variant="secondary" 
-                        className={`mr-2 mb-2 text-xs transition-colors cursor-default ${
-                          darkMode 
-                            ? 'bg-gray-700/70 text-gray-300 hover:bg-gray-600/70' 
-                            : 'bg-white/70 text-gray-700 hover:bg-white'
-                        }`}
-                      >
-                        {skill}
-                      </Badge>
-                    </motion.div>
+                      {skill}
+                    </span>
                   ))}
                 </div>
               </div>
-            </Card>
-          </motion.div>
-        ))}
-      </motion.div>
+            </motion.div>
+          );
+        })}
+      </div>
 
-      {/* Skills Visualization */}
-      <motion.div variants={itemVariants} className="mt-12 md:mt-16">
-        <Card className={`border-2 transition-colors ${
-          darkMode 
-            ? 'bg-gradient-to-br from-gray-800/50 to-gray-700/50 border-gray-700/50' 
-            : 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200'
-        }`}>
-          <div className="p-6 sm:p-8">
-            <h3 className={`text-2xl font-bold mb-6 text-center ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Technical Proficiency
-            </h3>
-            <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
-              <div>
-                <h4 className={`text-lg font-semibold mb-4 flex items-center ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  <Lightbulb className="w-5 h-5 mr-2 text-yellow-500" />
-                  Core Strengths
-                </h4>
-                <ul className={`space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  <li className="flex items-center text-sm sm:text-base">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                    Object-Oriented Programming (OOP)
-                  </li>
-                  <li className="flex items-center text-sm sm:text-base">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                    Data Structures and Algorithms (DSA)
-                  </li>
-                  <li className="flex items-center text-sm sm:text-base">
-                    <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                    Full-Stack Web Development
-                  </li>
-                  <li className="flex items-center text-sm sm:text-base">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
-                    Natural Language Processing (NLP)
-                  </li>
-                </ul>
+      {/* Technical Philosophies Section */}
+      <motion.div variants={itemVariants} className="max-w-6xl mx-auto">
+        <div className="glass-panel rounded-[2.5rem] p-8 sm:p-12 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/50 to-cyan-500/50"></div>
+          
+          <div className="grid md:grid-cols-2 gap-10 sm:gap-12 relative z-10">
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <Lightbulb className="w-6 h-6 text-emerald-400" />
+                <h4 className="text-xl font-black text-white uppercase tracking-widest">Engineering Ethos</h4>
               </div>
-              <div>
-                <h4 className={`text-lg font-semibold mb-4 flex items-center ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  <Users className="w-5 h-5 mr-2 text-blue-500" />
-                  Professional Skills
-                </h4>
-                <ul className={`space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  <li className="flex items-center text-sm sm:text-base">
-                    <span className="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
-                    Problem Solving
+              <ul className="space-y-4">
+                {[
+                  "Architectural integrity over rapid deployment",
+                  "User-centric intersection of design and logic",
+                  "Performance-first implementation patterns"
+                ].map((text, i) => (
+                  <li key={i} className="flex items-start gap-3 group/item">
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-2 group-hover/item:scale-150 transition-transform"></div>
+                    <span className="text-sm font-medium text-gray-400 group-hover/item:text-gray-200 transition-colors uppercase tracking-tight">{text}</span>
                   </li>
-                  <li className="flex items-center text-sm sm:text-base">
-                    <span className="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
-                    Team Collaboration
-                  </li>
-                  <li className="flex items-center text-sm sm:text-base">
-                    <span className="w-2 h-2 bg-teal-500 rounded-full mr-3"></span>
-                    Adaptability
-                  </li>
-                  <li className="flex items-center text-sm sm:text-base">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
-                    Critical Thinking
-                  </li>
-                </ul>
+                ))}
+              </ul>
+            </div>
+            
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <Users className="w-6 h-6 text-cyan-400" />
+                <h4 className="text-xl font-black text-white uppercase tracking-widest">Collaborative DNA</h4>
               </div>
+              <ul className="space-y-4">
+                {[
+                  "Agile methodology and sprint orchestration",
+                  "Cross-functional communication excellence",
+                  "Technical mentorship and knowledge sharing"
+                ].map((text, i) => (
+                  <li key={i} className="flex items-start gap-3 group/item">
+                    <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-2 group-hover/item:scale-150 transition-transform"></div>
+                    <span className="text-sm font-medium text-gray-400 group-hover/item:text-gray-200 transition-colors uppercase tracking-tight">{text}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </Card>
+        </div>
       </motion.div>
     </motion.div>
   );

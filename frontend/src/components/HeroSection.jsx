@@ -1,19 +1,28 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowDown, Code, Database, Brain, Sparkles, Github, Linkedin } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowDown, Code, Database, Brain, Sparkles, Github, Linkedin, ArrowRight, FileText } from 'lucide-react';
 import { Button } from './ui/button';
 import portfolioData from '../mock';
 
-const HeroSection = ({ darkMode = true }) => {
+const HeroSection = () => {
+  const [ctaUrl, setCtaUrl] = useState('https://www.myalltools.shop/');
+  const [showPreview, setShowPreview] = useState(false);
+
+  useEffect(() => {
+    const checkUrl = async () => {
+      try {
+        await fetch('https://www.myalltools.shop/', { mode: 'no-cors', cache: 'no-store' });
+        setCtaUrl('https://www.myalltools.shop/');
+      } catch (error) {
+        console.warn('Primary URL unreachable, using fallback');
+        setCtaUrl('https://myalltools.vercel.app/');
+      }
+    };
+    checkUrl();
+  }, []);
+
   const scrollToProjects = () => {
     const element = document.getElementById('projects');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToContact = () => {
-    const element = document.getElementById('contact');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -31,36 +40,26 @@ const HeroSection = ({ darkMode = true }) => {
   };
 
   const itemVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 30,
-    },
+    hidden: { opacity: 0, x: -30 },
     visible: {
       opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 12,
-      },
+      x: 0,
+      transition: { type: "spring", stiffness: 100, damping: 12 },
+    },
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeOut" },
     },
   };
 
   const floatingVariants = {
     animate: {
       y: [-10, 10, -10],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const sparkleVariants = {
-    animate: {
-      scale: [1, 1.2, 1],
-      rotate: [0, 180, 360],
       transition: {
         duration: 4,
         repeat: Infinity,
@@ -70,126 +69,135 @@ const HeroSection = ({ darkMode = true }) => {
   };
 
   return (
-    <div className={`relative min-h-screen flex items-center overflow-hidden transition-colors duration-300 ${
-      darkMode 
-        ? 'bg-gradient-to-br from-gray-900 via-black to-gray-800' 
-        : 'bg-gradient-to-br from-blue-50 via-white to-purple-50'
-    }`}>
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Orbs and sparkles... */}
-        <motion.div 
-          className={`absolute top-20 left-10 w-72 h-72 rounded-full mix-blend-multiply filter blur-xl opacity-30 ${
-            darkMode ? 'bg-blue-600' : 'bg-blue-200'
-          }`}
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div 
-          className={`absolute top-40 right-10 w-72 h-72 rounded-full mix-blend-multiply filter blur-xl opacity-30 ${
-            darkMode ? 'bg-purple-600' : 'bg-purple-200'
-          }`}
-          animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div 
-          className={`absolute -bottom-32 left-1/2 w-72 h-72 rounded-full mix-blend-multiply filter blur-xl opacity-30 ${
-            darkMode ? 'bg-pink-600' : 'bg-pink-200'
-          }`}
-          animate={{ scale: [1, 1.3, 1], x: [-50, 50, -50] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        />
-        {darkMode && (
-          <>
-            <motion.div className="absolute top-1/4 left-1/4 text-blue-400" variants={sparkleVariants} animate="animate">
-              <Sparkles className="w-4 h-4" />
-            </motion.div>
-            <motion.div className="absolute top-1/3 right-1/4 text-purple-400" variants={sparkleVariants} animate="animate" transition={{ delay: 1 }}>
-              <Sparkles className="w-6 h-6" />
-            </motion.div>
-            <motion.div className="absolute bottom-1/3 left-1/3 text-pink-400" variants={sparkleVariants} animate="animate" transition={{ delay: 2 }}>
-              <Sparkles className="w-3 h-3" />
-            </motion.div>
-          </>
-        )}
-      </div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div 
-          className="text-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
+    <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex flex-col md:flex-row items-center justify-between gap-12">
+      
+      {/* Text Content */}
+      <motion.div 
+        className="flex-1 text-center md:text-left z-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Announcement Badge with Preview */}
+        <div 
+          className="relative inline-block mt-24 md:mt-0"
+          onMouseEnter={() => setShowPreview(true)} 
+          onMouseLeave={() => setShowPreview(false)}
         >
-          {/* Main Content */}
-          <motion.div variants={itemVariants} className="mb-8">
-            <h1 className={`text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight ${
-              darkMode ? 'text-white' : 'text-gray-900'
-            }`}>
-              Hi, I'm{' '}
-              <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-                {portfolioData.personal.name}
-              </span>
-            </h1>
-            <p className={`text-lg sm:text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed px-4 ${
-              darkMode ? 'text-gray-300' : 'text-gray-600'
-            }`}>
-              {portfolioData.personal.title} passionate about building scalable, 
-              high-performance systems to solve real-world problems.
-            </p>
-            
-            {/* Social Links - NEWLY ADDED */}
-            <motion.div variants={itemVariants} className="flex justify-center items-center gap-4">
-                <a href = "https://github.com/Veeresh-hp" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className={`transition-colors ${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                        <Github className="w-5 h-5 mr-2" />
-                        GitHub
-                    </Button>
-                </a>
-                <a href="https://www.linkedin.com/in/veereshhp" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className={`transition-colors ${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
-                        <Linkedin className="w-5 h-5 mr-2" />
-                        LinkedIn
-                    </Button>
-                </a>
-            </motion.div>
+          <motion.a 
+            href={ctaUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            variants={itemVariants} 
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:border-violet-500/50 hover:bg-white/10 transition-all duration-300 group mb-6 cursor-pointer"
+          >
+            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600">
+              <Sparkles className="w-3 h-3 text-white" />
+            </span>
+            <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">
+              Check out my AI Tools Hub
+            </span>
+            <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all" />
+          </motion.a>
 
-          </motion.div>
+          {/* Website Preview Tooltip */}
+          <AnimatePresence>
+            {showPreview && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-full left-0 mt-4 z-50 w-[300px] sm:w-[400px] aspect-[16/9] rounded-xl overflow-hidden border border-white/20 shadow-2xl bg-gray-900"
+              >
+                 {/* Loading Placeholder */}
+                <div className="absolute inset-0 bg-gray-800 animate-pulse z-0"></div>
+                
+                {/* Iframe Preview - Scaled */}
+                <div className="w-full h-full relative z-10">
+                   {/* Interaction Blocker to prevent mouse trapping */}
+                  <div className="absolute inset-0 z-20"></div> 
+                  <iframe 
+                    src="https://myalltools.vercel.app/" 
+                    title="Website Preview"
+                    className="w-[200%] h-[200%] transform scale-[0.5] origin-top-left border-0 bg-white"
+                    loading="lazy"
+                  />
+                </div>
+                
+                {/* Label */}
+                <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-2 z-30 flex items-center justify-between border-t border-white/10">
+                   <span className="text-xs text-white font-medium pl-1">Live Preview</span>
+                   <span className="text-[10px] text-gray-400">{ctaUrl.replace('https://', '')}</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-          {/* Skills Icons */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 my-12 px-4">
-            <motion.div className={`flex flex-col items-center p-4 rounded-xl shadow-lg transition-colors ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'}`} variants={floatingVariants} animate="animate">
-              <Code className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 mb-2" />
-              <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Full Stack</span>
-            </motion.div>
-            <motion.div className={`flex flex-col items-center p-4 rounded-xl shadow-lg transition-colors ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'}`} variants={floatingVariants} animate="animate" transition={{ delay: 0.5 }}>
-              <Database className="w-6 h-6 sm:w-8 sm:h-8 text-green-500 mb-2" />
-              <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Databases</span>
-            </motion.div>
-            <motion.div className={`flex flex-col items-center p-4 rounded-xl shadow-lg transition-colors ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'}`} variants={floatingVariants} animate="animate" transition={{ delay: 1 }}>
-              <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-purple-500 mb-2" />
-              <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>AI/ML</span>
-            </motion.div>
-          </motion.div>
-
-          {/* CTA Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center mb-16 px-4">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 text-base sm:text-lg" onClick={scrollToProjects}>
-              View My Work
-            </Button>
-            <Button variant="outline" size="lg" className={`px-6 sm:px-8 py-3 text-base sm:text-lg transition-colors ${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`} onClick={scrollToContact}>
-              Get In Touch
-            </Button>
-          </motion.div>
-
-          {/* Scroll Indicator */}
-          <motion.div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:block" variants={itemVariants}>
-            <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="cursor-pointer" onClick={scrollToProjects}>
-              <ArrowDown className={`w-6 h-6 ${darkMode ? 'text-gray-400' : 'text-gray-400'}`} />
-            </motion.div>
-          </motion.div>
+        <motion.div variants={itemVariants} className="flex items-center gap-4 mb-4">
+           <div className="h-[1px] w-8 bg-gray-500"></div>
+           <span className="text-gray-400 text-sm uppercase tracking-widest">Hello</span>
         </motion.div>
-      </div>
+        
+        <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          I'm <span className="text-white">{portfolioData.personal.name}</span>
+        </motion.h1>
+
+        <motion.p variants={itemVariants} className="text-gray-400 text-lg md:text-xl mb-10 max-w-lg leading-relaxed">
+          {portfolioData.personal.title}. {portfolioData.personal.description}
+        </motion.p>
+ 
+        <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
+          <Button 
+            size="lg" 
+            className="rounded-lg px-8 py-6 bg-primary hover:bg-primary/90 text-white text-base font-semibold shadow-lg shadow-primary/20 transition-all duration-300" 
+            onClick={scrollToProjects}
+          >
+            Learn more
+          </Button>
+          
+          <a href="/resume/veeresh_H_P_RESUME.pdf" target="_blank" rel="noopener noreferrer">
+             <Button 
+                size="lg" 
+                variant="outline"
+                className="rounded-lg px-8 py-6 border-white/10 bg-white/5 hover:bg-white/10 text-white text-base font-semibold transition-all duration-300 backdrop-blur-sm"
+             >
+                <FileText className="w-5 h-5 mr-2" />
+                View Resume
+             </Button>
+          </a>
+        </motion.div>
+      </motion.div>
+
+      {/* Image Content */}
+      <motion.div 
+        className="flex-1 relative w-full flex justify-center md:justify-end"
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Decorative Floating Elements (Simulating the cubes in the reference) */}
+        <motion.div 
+          variants={floatingVariants} 
+          animate="animate"
+          className="absolute top-0 right-10 w-16 h-16 bg-primary/80 rotate-12 blur-sm rounded-xl opacity-80 z-0"
+        ></motion.div>
+        <motion.div 
+          variants={floatingVariants} 
+          animate="animate"
+          className="absolute bottom-10 left-10 w-12 h-12 bg-primary/60 -rotate-12 blur-sm rounded-lg opacity-60 z-0"
+          style={{ animationDelay: '1s' }}
+        ></motion.div>
+
+         <motion.div variants={imageVariants} className="relative z-10 w-full max-w-lg">
+            <img 
+              src="/hero-character.png" 
+              alt="3D Character" 
+              className="w-full h-auto object-contain drop-shadow-2xl"
+            />
+         </motion.div>
+      </motion.div>
+
     </div>
   );
 };

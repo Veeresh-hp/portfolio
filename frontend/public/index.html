@@ -1,282 +1,99 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Veeresh H P | Portfolio</title>
-        <style>
-            /* Basic page styling to match homepage */
-            body {
-                background-color: #111827; /* Fallback background */
-                background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-                margin: 0;
-                padding: 0;
-                min-height: 100vh;
+  <head>
+    <meta charset="utf-8" />
+
+    <!-- Responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Page title -->
+    <title>Veeresh H P | Portfolio</title>
+
+    <!-- Base styling -->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+
+        /* Dark gradient background */
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+
+        /* System font stack */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+          "Helvetica Neue", sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- React/Vite/SPA mount point -->
+    <div id="root"></div>
+
+    <!-- PostHog Analytics -->
+    <script>
+      (function (t, e) {
+        var o, n, p, r;
+        e.__SV ||
+          ((window.posthog = e),
+          (e._i = []),
+          (e.init = function (i, s, a) {
+            function g(t, e) {
+              var o = e.split(".");
+              o.length === 2 && ((t = t[o[0]]), (e = o[1]));
+              t[e] = function () {
+                t.push([e].concat([].slice.call(arguments, 0)));
+              };
             }
 
-            /* --- MODERN WIDGET CONTAINER --- */
-            #ai-tools-widget {
-                position: fixed;
-                top: 50%;
-                right: 0;
-                transform: translateY(-50%);
-                z-index: 9999;
-                display: flex;
-                align-items: center;
-                flex-direction: row-reverse;
-                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            p = t.createElement("script");
+            p.type = "text/javascript";
+            p.async = true;
+            p.crossOrigin = "anonymous";
+            p.src =
+              s.api_host.replace(
+                ".i.posthog.com",
+                "-assets.i.posthog.com"
+              ) + "/static/array.js";
+
+            r = t.getElementsByTagName("script")[0];
+            r.parentNode.insertBefore(p, r);
+
+            var u = e;
+            a !== undefined ? (u = e[a] = []) : (a = "posthog");
+
+            u.people = u.people || [];
+            u.toString = function (t) {
+              var e = "posthog";
+              a !== "posthog" && (e += "." + a);
+              t || (e += " (stub)");
+              return e;
+            };
+            u.people.toString = function () {
+              return u.toString(1) + ".people (stub)";
+            };
+
+            o =
+              "init capture register register_once unregister identify reset alias get_distinct_id get_session_id on off debug".split(
+                " "
+              );
+            for (n = 0; n < o.length; n++) {
+              g(u, o[n]);
             }
 
-            /* --- MODERN PULL HANDLE --- */
-            #widget-handle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 48px;
-                height: 80px;
-                /* Transparent background with blur */
-                background: rgba(31, 41, 55, 0.5);
-                backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-right: none;
-                border-radius: 12px 0 0 12px;
-                box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.2);
-                cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                overflow: hidden;
-            }
-            
-            #widget-handle:hover {
-                background: rgba(55, 65, 81, 0.6);
-                transform: translateX(-2px);
-                box-shadow: -6px 6px 25px rgba(0, 0, 0, 0.25);
-            }
-            
-            #widget-handle svg {
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                z-index: 1;
-                position: relative;
-            }
+            e._i.push([i, s, a]);
+          }),
+          (e.__SV = 1));
+      })(document, window.posthog || []);
 
-            /* --- MODERN SLIDING BUTTON --- */
-            #myalltools {
-                display: flex !important;
-                align-items: center !important;
-                padding: 12px 20px;
-                text-decoration: none;
-                font-size: 14px !important;
-                font-weight: 600;
-                border-radius: 12px !important;
-                box-shadow: 
-                    0 8px 25px rgba(0, 0, 0, 0.25),
-                    0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
-                border: 1px solid rgba(255, 255, 255, 0.2) !important;
-                backdrop-filter: blur(12px);
-                
-                /* Hide the button off-screen to the right by default */
-                transform: translateX(100%);
-                opacity: 0;
-                visibility: hidden;
-                
-                /* Smooth modern transitions */
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                
-                /* Transparent gradient matching homepage theme */
-                background: linear-gradient(135deg, rgba(79, 70, 229, 0.5) 0%, rgba(124, 58, 237, 0.5) 25%, rgba(219, 39, 119, 0.5) 75%, rgba(245, 158, 11, 0.5) 100%);
-                background-size: 200% 200%;
-                animation: gradient-flow 8s ease infinite;
-                position: relative;
-                overflow: hidden;
-            }
-
-            /* Subtle shine effect on button */
-            #myalltools::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-                transition: left 0.6s ease;
-            }
-
-            #myalltools:hover::before {
-                left: 100%;
-            }
-
-            /* --- OPEN STATE --- */
-            #ai-tools-widget.is-open #myalltools {
-                transform: translateX(0);
-                opacity: 1;
-                visibility: visible;
-            }
-
-            /* Rotate and color change for handle icon when open */
-            #ai-tools-widget.is-open #widget-handle svg {
-                transform: rotate(180deg);
-                stroke: #a5b4fc; /* Lighter color for open state */
-            }
-            
-            /* Modern gradient animation */
-            @keyframes gradient-flow {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
-
-            #myalltools:hover {
-                transform: translateY(-2px) scale(1.02);
-                box-shadow: 
-                    0 12px 35px rgba(0, 0, 0, 0.3),
-                    0 0 0 1px rgba(255, 255, 255, 0.2) inset !important;
-            }
-
-            #myalltools:active {
-                transform: translateY(0) scale(0.98);
-            }
-
-            #myalltools p {
-                color: #ffffff;
-                margin: 0;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-                font-weight: 600;
-                letter-spacing: 0.025em;
-                z-index: 1;
-                position: relative;
-            }
-
-            #myalltools img {
-                width: 24px;
-                height: 24px;
-                margin-right: 12px;
-                border-radius: 4px;
-                z-index: 1;
-                position: relative;
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 768px) {
-                #widget-handle {
-                    width: 44px;
-                    height: 70px;
-                }
-                
-                #myalltools {
-                    padding: 10px 16px;
-                    font-size: 13px !important;
-                }
-                
-                #myalltools img {
-                    width: 20px;
-                    height: 20px;
-                    margin-right: 10px;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div id="root"></div>
-
-        <div id="ai-tools-widget">
-            <div id="widget-handle" role="button" tabindex="0" aria-label="Toggle AI Tools widget">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e5e7eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
-                </svg>
-            </div>
-
-            <a id="myalltools" target="_blank" href="https://myalltools.vercel.app">
-                <div style="display: flex; flex-direction: row; align-items: center">
-                    <img src="%PUBLIC_URL%/logo.png" alt="AI Tools Logo" />
-                    <p>Visit MY AI TOOLS</p>
-                </div>
-            </a>
-        </div>
-
-        <script>
-            const widget = document.getElementById('ai-tools-widget');
-            const handle = document.getElementById('widget-handle');
-
-            // Open the widget only when the mouse enters the HANDLE
-            handle.addEventListener('mouseenter', () => {
-                widget.classList.add('is-open');
-            });
-
-            // Close the widget when the mouse leaves the ENTIRE WIDGET AREA
-            // (This ensures it stays open when moving from the handle to the button)
-            widget.addEventListener('mouseleave', () => {
-                widget.classList.remove('is-open');
-            });
-        </script>
-        
-        <script>
-            !(function (t, e) {
-                var o, n, p, r;
-                e.__SV ||
-                    ((window.posthog = e),
-                    (e._i = []),
-                    (e.init = function (i, s, a) {
-                        function g(t, e) {
-                            var o = e.split(".");
-                            2 == o.length && ((t = t[o[0]]), (e = o[1])),
-                                (t[e] = function () {
-                                    t.push(
-                                        [e].concat(
-                                            Array.prototype.slice.call(
-                                                arguments,
-                                                0,
-                                            ),
-                                        ),
-                                    );
-                                });
-                        }
-                        ((p = t.createElement("script")).type =
-                            "text/javascript"),
-                            (p.crossOrigin = "anonymous"),
-                            (p.async = !0),
-                            (p.src =
-                                s.api_host.replace(
-                                    ".i.posthog.com",
-                                    "-assets.i.posthog.com",
-                                ) + "/static/array.js"),
-                            (r =
-                                t.getElementsByTagName(
-                                    "script",
-                                )[0]).parentNode.insertBefore(p, r);
-                        var u = e;
-                        for (
-                            void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
-                                u.people = u.people || [],
-                                u.toString = function (t) {
-                                    var e = "posthog";
-                                    return (
-                                        "posthog" !== a && (e += "." + a),
-                                        t || (e += " (stub)"),
-                                        e
-                                    );
-                                },
-                                u.people.toString = function () {
-                                    return u.toString(1) + ".people (stub)";
-                                },
-                                o =
-                                    "init me ws ys ps bs capture je Di ks register register_once register_for_session unregister unregister_for_session Ps getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty Es $s createPersonProfile Is opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing Ss debug xs getPageViewId captureTraceFeedback captureTraceMetric".split(
-                                        " ",
-                                    ),
-                                n = 0;
-                            n < o.length;
-                            n++
-                        )
-                            g(u, o[n]);
-                        e._i.push([i, s, a]);
-                    }),
-                    (e.__SV = 1));
-            })(document, window.posthog || []);
-            posthog.init("phc_yJW1VjHGGwmCbbrtczfqqNxgBDbhlhOWcdzcIJEOTFE", {
-                api_host: "https://us.i.posthog.com",
-                person_profiles: "identified_only", // or 'always'
-            });
-        </script>
-    </body>
+      posthog.init(
+        "phc_yJW1VjHGGwmCbbrtczfqqNxgBDbhlhOWcdzcIJEOTFE",
+        {
+          api_host: "https://us.i.posthog.com",
+          person_profiles: "identified_only",
+        }
+      );
+    </script>
+  </body>
 </html>

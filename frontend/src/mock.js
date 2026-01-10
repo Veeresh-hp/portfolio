@@ -9,8 +9,8 @@ export const portfolioData = {
     email: "veereshhp2004@gmail.com",
     phone: "+91 6361968505",
     location: "Bengaluru, India",
-    linkedin: "#", // Will be updated when actual LinkedIn provided
-    github: "#", // Placeholder
+    linkedin: "https://www.linkedin.com/in/veereshhp",
+    github: "https://github.com/Veeresh-hp",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face" // Professional headshot placeholder
   },
 
@@ -49,7 +49,7 @@ export const portfolioData = {
     frontend: ["HTML", "CSS", "JavaScript", "React.js"],
     frameworks: ["Flask"],
     databases: ["MySQL", "MongoDB"],
-    tools: ["VS Code", "Jupyter Notebook"],
+    tools: ["VS Code", "Jupyter Notebook", "PyCharm", "Antigravity"],
     softSkills: ["Communication", "Decision-Making", "Adaptability", "Team Collaboration"]
   },
 
@@ -65,6 +65,7 @@ export const portfolioData = {
         "Efficient text processing",
         "Responsive web interface"
       ],
+      github: "https://github.com/Veeresh-hp/Video-Transcript-Summarizer",
       status: "completed",
       category: "Web Application",
       bgColor: "light-pink"
@@ -80,6 +81,7 @@ export const portfolioData = {
         "Secure authentication",
         "User access control"
       ],
+      github: "https://github.com/Veeresh-hp/INVOICE_GST",
       status: "completed",
       category: "Full Stack Application",
       bgColor: "mid-blue"
@@ -95,6 +97,7 @@ export const portfolioData = {
         "Data augmentation and transfer learning",
         "Plans for multilingual support"
       ],
+      github: "https://github.com/Veeresh-hp/BOLT",
       status: "ongoing",
       category: "AI/ML Project",
       bgColor: "mid-purple"
@@ -146,6 +149,14 @@ export const portfolioData = {
       type: "systems",
       // Corrected to match the uploaded file exactly
       link: "/certificates/OS_BASICS_Certificate.pdf"
+    },
+    {
+      id: 6,
+      name: "TCS Salesforce Certification",
+      issuer: "TCS",
+      year: "2025",
+      type: "cloud",
+      link: "/certificates/Tcs_Salesforce_Certificate.pdf"
     }
   ],
 
@@ -166,8 +177,8 @@ export const portfolioData = {
   ],
 
   socialLinks: {
-    linkedin: "#",
-    github: "#",
+    linkedin: "https://www.linkedin.com/in/veereshhp",
+    github: "https://github.com/Veeresh-hp",
     email: "veereshhp2004@gmail.com",
     phone: "+91 6361968505"
   }

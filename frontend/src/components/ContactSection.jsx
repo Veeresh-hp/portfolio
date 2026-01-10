@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Github, Linkedin, MessageCircle, Sparkles } from 'lucide-react';
-import { Card } from './ui/card';
+import { Mail, Phone, MapPin, Send, Github, Linkedin, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { useToast } from '../hooks/use-toast';
 import portfolioData from '../mock';
 
-const ContactSection = ({ darkMode = true }) => {
+const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,7 +15,7 @@ const ContactSection = ({ darkMode = true }) => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false); // State for AI message generation
+  const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
 
   const containerVariants = {
@@ -31,10 +30,7 @@ const ContactSection = ({ darkMode = true }) => {
   };
 
   const itemVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 20,
-    },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
@@ -48,14 +44,10 @@ const ContactSection = ({ darkMode = true }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // --- Gemini API Integration ---
-  const handleGenerateMessage = async () => {
+  const handleGenerateMessage = () => {
     if (!formData.name || !formData.subject) {
       toast({
         title: "Info Needed",
@@ -64,58 +56,32 @@ const ContactSection = ({ darkMode = true }) => {
       });
       return;
     }
-    setIsGenerating(true);
     
-    const prompt = `You are a professional communication assistant. Write a friendly and concise message for a portfolio contact form. The sender's name is "${formData.name}" and the subject of the message is "${formData.subject}". The message should express genuine interest in connecting or discussing the subject. Keep it under 50 words.`;
+    setIsGenerating(true);
 
-    try {
-        let chatHistory = [];
-        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-        const payload = { contents: chatHistory };
-        const apiKey = "" // API key is handled by the environment
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+    // Simulate a "thinking" delay for better UX
+    setTimeout(() => {
+        const templates = [
+            `Hi Veeresh, I'm ${formData.name}. I recently visited your portfolio and I'm very interested in "${formData.subject}". I'd love to discuss how we can collaborate.`,
+            `Hello! My name is ${formData.name}. I'm reaching out regarding "${formData.subject}". Your work looks impressive, and I think we could build something great together.`,
+            `Hi, I'm ${formData.name}. I'd like to talk to you about "${formData.subject}". Please let me know when you're available to chat.`
+        ];
         
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
-        }
-
-        const result = await response.json();
+        const randomTemplate = templates[Math.floor(Math.random() * templates.length)];
         
-        if (result.candidates && result.candidates.length > 0 &&
-            result.candidates[0].content && result.candidates[0].content.parts &&
-            result.candidates[0].content.parts.length > 0) {
-          const text = result.candidates[0].content.parts[0].text;
-          setFormData(prev => ({ ...prev, message: text.trim() }));
-          toast({
-            title: "Message Drafted!",
-            description: "An AI-powered message has been generated for you.",
-          });
-        } else {
-          throw new Error("Invalid response structure from API.");
-        }
-    } catch (error) {
-        console.error("Gemini API call failed:", error);
+        setFormData(prev => ({ ...prev, message: randomTemplate }));
+        
         toast({
-            title: "Error",
-            description: "Could not generate a message. Please try again.",
-            variant: "destructive",
+          title: "Draft Generated!",
+          description: "A professional message has been drafted for you.",
         });
-    } finally {
         setIsGenerating(false);
-    }
+    }, 2000);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // Simulate form submission
     setTimeout(() => {
       toast({
         title: "Message Sent!",
@@ -128,209 +94,174 @@ const ContactSection = ({ darkMode = true }) => {
 
   return (
     <motion.div 
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
     >
-      <motion.div variants={itemVariants} className="text-center mb-12 md:mb-16">
-        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-          Get In Touch
+      {/* Background Signature Glow */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] -z-10 animate-pulse-slow"></div>
+
+      <motion.div variants={itemVariants} className="flex flex-col items-center mb-8 sm:mb-12">
+        <h2 className="text-3xl md:text-4xl font-black mb-4 text-white text-center">
+          Let's Collaborate
         </h2>
-        <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
-        <p className={`text-lg max-w-2xl mx-auto px-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          I'm always open to discussing new opportunities, interesting projects, or just having a chat about technology.
+        <div className="w-12 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full mb-6"></div>
+        <p className="text-sm sm:text-base text-gray-400 max-w-2xl mx-auto text-center font-medium px-4">
+          Ready to synthesize next-generation systems or just have a technical query? Reach out to the base.
         </p>
       </motion.div>
 
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-        {/* Left Column */}
-        <motion.div variants={itemVariants} className="flex flex-col gap-8">
-          {/* Contact Information Card */}
-          <Card className={`p-4 sm:p-6 border-2 transition-colors ${
-            darkMode 
-              ? 'bg-gradient-to-br from-blue-900/20 to-purple-900/20 border-blue-800/50' 
-              : 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200'
-          }`}>
-            <h3 className={`text-xl sm:text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Contact Information
-            </h3>
-            <div className="space-y-4">
-              <a href={`mailto:${portfolioData.personal.email}`} className="block">
-                <motion.div 
-                  className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
-                    darkMode ? 'bg-gray-800/50' : 'bg-white'
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="p-2 sm:p-3 bg-blue-600 rounded-lg mr-3 sm:mr-4">
-                    <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                  </div>
-                  <div>
-                    <h4 className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Email</h4>
-                    <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                      {portfolioData.personal.email}
-                    </p>
-                  </div>
-                </motion.div>
-              </a>
-              <a href={`tel:${portfolioData.personal.phone}`} className="block">
-                <motion.div 
-                  className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
-                    darkMode ? 'bg-gray-800/50' : 'bg-white'
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="p-2 sm:p-3 bg-green-600 rounded-lg mr-3 sm:mr-4">
-                    <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                  </div>
-                  <div>
-                    <h4 className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Phone</h4>
-                    <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                      {portfolioData.personal.phone}
-                    </p>
-                  </div>
-                </motion.div>
-              </a>
-              <motion.div 
-                className={`flex items-center p-3 sm:p-4 rounded-lg shadow-sm ${
-                  darkMode ? 'bg-gray-800/50' : 'bg-white'
-                }`}
+      <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
+        {/* Contact Info Sidebar */}
+        <motion.div variants={itemVariants} className="lg:col-span-2 space-y-4">
+          <div className="space-y-4">
+            {[
+              { 
+                icon: Mail, 
+                label: "Secure Channel", 
+                value: portfolioData.personal.email, 
+                color: "text-blue-400",
+                href: `mailto:${portfolioData.personal.email}`
+              },
+              { 
+                icon: Phone, 
+                label: "Frequency", 
+                value: portfolioData.personal.phone, 
+                color: "text-indigo-400",
+                href: `tel:${portfolioData.personal.phone}`
+              },
+              { 
+                icon: MapPin, 
+                label: "Operational Base", 
+                value: portfolioData.personal.location, 
+                color: "text-cyan-400",
+                href: "#"
+              }
+            ].map((item, i) => (
+              <a 
+                href={item.href}
+                key={i} 
+                className="block group"
+                {...(item.label === "Secure Channel" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
-                <div className="p-2 sm:p-3 bg-purple-600 rounded-lg mr-3 sm:mr-4">
-                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <div className="glass-panel-compact rounded-[1.5rem] p-4 sm:p-5 flex items-center gap-5 transition-all duration-500 hover:bg-white/5 hover:border-white/20">
+                  <div className={`p-3 rounded-xl bg-white/5 ${item.color} group-hover:scale-110 transition-transform`}>
+                    <item.icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-0.5">{item.label}</h4>
+                    <p className="text-xs sm:text-sm font-bold text-white group-hover:text-blue-400 transition-colors">{item.value}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Location</h4>
-                  <p className={`text-sm sm:text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {portfolioData.personal.location}
-                  </p>
-                </div>
-              </motion.div>
-            </div>
-          </Card>
+              </a>
+            ))}
+          </div>
 
-          {/* Social Links Card */}
-          <Card className={`p-4 sm:p-6 transition-colors ${
-            darkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
-          }`}>
-            <h3 className={`text-lg sm:text-xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Connect With Me
-            </h3>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <a href = "https://github.com/Veeresh-hp" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
-                  <Button variant="outline" size="lg" className={`w-full text-white border-gray-900 transition-colors ${
-                    darkMode ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-900 hover:bg-gray-800'
-                  }`}>
-                    <Github className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    GitHub
-                  </Button>
-                </motion.div>
+          <div className="glass-panel-compact rounded-[2rem] p-6 space-y-6">
+            <h4 className="text-xs font-black text-white uppercase tracking-widest border-b border-white/5 pb-3">Social Uplinks</h4>
+            <div className="grid grid-cols-2 gap-3">
+              <a href={portfolioData.personal.linkedin} target="_blank" rel="noopener noreferrer" className="group">
+                <Button variant="ghost" className="w-full rounded-xl bg-white/5 border border-white/5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/5 group-hover:border-blue-400/20 py-4 h-auto">
+                  <Linkedin className="w-4 h-4 mr-2" /> <span className="text-[9px] font-black tracking-widest">LINKEDIN</span>
+                </Button>
               </a>
-              <a href= "https://www.linkedin.com/in/veereshhp" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
-                  <Button variant="outline" size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700 border-blue-600">
-                    <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    LinkedIn
-                  </Button>
-                </motion.div>
+              <a href={portfolioData.personal.github} target="_blank" rel="noopener noreferrer" className="group">
+                <Button variant="ghost" className="w-full rounded-xl bg-white/5 border border-white/5 text-gray-400 hover:text-white hover:bg-white/5 group-hover:border-white/20 py-4 h-auto">
+                  <Github className="w-4 h-4 mr-2" /> <span className="text-[9px] font-black tracking-widest">GITHUB</span>
+                </Button>
               </a>
             </div>
-          </Card>
+          </div>
         </motion.div>
 
-        {/* Contact Form (Right Column) */}
-        <motion.div variants={itemVariants}>
-          <Card className={`p-4 sm:p-6 h-full transition-colors ${
-            darkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-200'
-          }`}>
-            <div className="flex items-center mb-6">
-              <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 mr-3" />
-              <h3 className={`text-xl sm:text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                Send a Message
-              </h3>
-            </div>
+        {/* Contact Form */}
+        <motion.div variants={itemVariants} className="lg:col-span-3">
+          <div className="glass-panel rounded-[2rem] p-6 sm:p-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
             
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="name" className={`block text-sm font-medium mb-2 ${
-                    darkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Full Name
-                  </label>
-                  <Input id="name" name="name" type="text" value={formData.name} onChange={handleInputChange} required className={`w-full ${darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''}`} placeholder="Your full name" />
+            <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Identity</label>
+                  <Input 
+                    name="name" 
+                    value={formData.name} 
+                    onChange={handleInputChange} 
+                    required 
+                    className="bg-white/5 border-white/5 rounded-xl py-3 sm:py-4 px-4 text-white placeholder:text-gray-600 focus:border-blue-500/50 focus:ring-0 transition-all text-sm font-medium h-auto"
+                    placeholder="Subject Name" 
+                  />
                 </div>
-                <div>
-                  <label htmlFor="email" className={`block text-sm font-medium mb-2 ${
-                    darkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Email Address
-                  </label>
-                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required className={`w-full ${darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''}`} placeholder="your.email@example.com" />
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Digital Address</label>
+                  <Input 
+                    name="email" 
+                    type="email" 
+                    value={formData.email} 
+                    onChange={handleInputChange} 
+                    required 
+                    className="bg-white/5 border-white/5 rounded-xl py-3 sm:py-4 px-4 text-white placeholder:text-gray-600 focus:border-blue-500/50 focus:ring-0 transition-all text-sm font-medium h-auto"
+                    placeholder="name@example.com" 
+                  />
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="subject" className={`block text-sm font-medium mb-2 ${
-                  darkMode ? 'text-gray-300' : 'text-gray-700'
-                }`}>
-                  Subject
-                </label>
-                <Input id="subject" name="subject" type="text" value={formData.subject} onChange={handleInputChange} required className={`w-full ${darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''}`} placeholder="What's this about?" />
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Topic of Interest</label>
+                <Input 
+                  name="subject" 
+                  value={formData.subject} 
+                  onChange={handleInputChange} 
+                  required 
+                  className="bg-white/5 border-white/5 rounded-xl py-3 sm:py-4 px-4 text-white placeholder:text-gray-600 focus:border-blue-500/50 focus:ring-0 transition-all text-sm font-medium h-auto"
+                  placeholder="What's on your mind?" 
+                />
               </div>
 
-              {/* --- MODIFIED MESSAGE AREA --- */}
-              <div className="relative">
-                <div className="flex justify-between items-center mb-2">
-                    <label htmlFor="message" className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Message
-                    </label>
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleGenerateMessage}
-                        disabled={isGenerating}
-                        className={`text-xs ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}`}
-                    >
-                        {isGenerating ? (
-                            <>
-                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-2"></div>
-                                Drafting...
-                            </>
-                        ) : (
-                            <>
-                                <Sparkles className="w-3 h-3 mr-2" />
-                                Help me write
-                            </>
-                        )}
-                    </Button>
+              <div className="space-y-3">
+                <div className="flex justify-between items-end ml-1">
+                  <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest">The Core Message</label>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={handleGenerateMessage}
+                    disabled={isGenerating}
+                    className="text-[9px] h-auto p-0 font-black text-blue-400 hover:text-cyan-400 bg-transparent hover:bg-transparent"
+                  >
+                    {isGenerating ? "Synthesizing..." : "✨ AI-POWERED DRAFT"}
+                  </Button>
                 </div>
-                <Textarea id="message" name="message" value={formData.message} onChange={handleInputChange} required rows={6} className={`w-full resize-none ${darkMode ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400' : ''}`} placeholder="Tell me about your project, question, or just say hello!" />
+                <Textarea 
+                  name="message" 
+                  value={formData.message} 
+                  onChange={handleInputChange} 
+                  required 
+                  rows={4} 
+                  className="bg-white/5 border-white/5 rounded-xl p-4 text-white placeholder:text-gray-600 focus:border-blue-500/50 focus:ring-0 transition-all resize-none text-sm font-medium"
+                  placeholder="Share your thoughts, project details, or just a friendly hello..." 
+                />
               </div>
 
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl py-4 sm:py-5 h-auto text-sm sm:text-base font-black tracking-widest shadow-[0_10px_40px_rgba(37,99,235,0.3)] transition-all active:scale-95"
               >
                 {isSubmitting ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Sending...
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                    TRANSMITTING...
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center">
-                    <Send className="w-4 h-4 mr-2" />
-                    Send Message
+                  <div className="flex items-center gap-2">
+                    <Send className="w-4 h-4" /> INITIATE CONNECTION
                   </div>
                 )}
               </Button>
             </form>
-          </Card>
+          </div>
         </motion.div>
       </div>
     </motion.div>

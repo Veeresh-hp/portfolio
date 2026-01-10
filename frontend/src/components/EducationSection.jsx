@@ -1,30 +1,25 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, MapPin, Calendar, Award } from 'lucide-react';
-import { Card } from './ui/card';
-import { Badge } from './ui/badge';
+import { GraduationCap, MapPin, Calendar, Award, Brain } from 'lucide-react';
 import portfolioData from '../mock';
 
-const EducationSection = ({ darkMode = true }) => {
+const EducationSection = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: -50,
-    },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
-      x: 0,
+      y: 0,
       transition: {
         type: "spring",
         stiffness: 100,
@@ -33,180 +28,123 @@ const EducationSection = ({ darkMode = true }) => {
     },
   };
 
-  const getStatusColor = (status) => {
-    if (darkMode) {
-      switch (status) {
-        case 'ongoing':
-          return 'bg-blue-900/30 text-blue-400 border-blue-800';
-        case 'completed':
-          return 'bg-green-900/30 text-green-400 border-green-800';
-        default:
-          return 'bg-gray-800/30 text-gray-400 border-gray-700';
-      }
-    } else {
-      switch (status) {
-        case 'ongoing':
-          return 'bg-blue-100 text-blue-800 border-blue-200';
-        case 'completed':
-          return 'bg-green-100 text-green-800 border-green-200';
-        default:
-          return 'bg-gray-100 text-gray-800 border-gray-200';
-      }
-    }
-  };
-
   return (
     <motion.div 
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
     >
-      <motion.div variants={itemVariants} className="text-center mb-12 md:mb-16">
-        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-          Education
+      {/* Background Signature Glow */}
+      <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[100px] -z-10 animate-pulse-slow"></div>
+
+      <motion.div variants={itemVariants} className="flex flex-col items-center mb-12 sm:mb-20">
+        <h2 className="text-4xl md:text-5xl font-black mb-4 text-white text-center">
+          Academic Journey
         </h2>
-        <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
-        <p className={`text-lg max-w-2xl mx-auto px-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          My academic journey and educational background
+        <div className="w-12 h-1.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full mb-8"></div>
+        <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto text-center font-medium px-4">
+          A track record of academic excellence and continuous technical learning.
         </p>
       </motion.div>
 
-      <div className="relative">
-        {/* Timeline Line */}
-        <div className={`absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 transform md:-translate-x-0.5 ${
-          darkMode ? 'bg-gray-600' : 'bg-gray-300'
-        }`}></div>
+      <div className="relative max-w-6xl mx-auto">
+        {/* Modern Vertical Timeline */}
+        <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-orange-500/50 via-amber-500/50 to-transparent transform md:-translate-x-px"></div>
 
-        <motion.div className="space-y-8" variants={containerVariants}>
+        <div className="space-y-8 sm:space-y-12">
           {portfolioData.education.map((edu, index) => (
             <motion.div
               key={edu.id}
               variants={itemVariants}
-              className={`relative flex items-center ${
-                index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+              className={`relative flex flex-col md:flex-row items-start md:items-center ${
+                index % 2 === 0 ? '' : 'md:flex-row-reverse'
               }`}
             >
-              {/* Timeline Dot */}
-              <div className="absolute left-4 md:left-1/2 w-4 h-4 bg-blue-500 rounded-full transform md:-translate-x-2 z-10 flex items-center justify-center">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
+              {/* Point on Timeline */}
+              <div className="absolute left-6 md:left-1/2 w-3.5 h-3.5 bg-background border-2 border-orange-500 rounded-full transform -translate-x-[6.5px] md:-translate-x-1.5 z-10 flex items-center justify-center">
+                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse-slow"></div>
               </div>
 
               {/* Content Card */}
-              <div className={`ml-12 md:ml-0 md:w-5/12 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <Card className={`border-2 hover:shadow-lg transition-all duration-300 ${
-                    darkMode 
-                      ? 'bg-gray-800/50 border-gray-700 hover:border-blue-600/50 hover:shadow-blue-500/20' 
-                      : 'bg-white border-gray-200 hover:border-blue-300'
-                  }`}>
-                    <div className="p-4 sm:p-6">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
-                        <div className="flex items-center mb-3 sm:mb-0">
-                          <div className={`p-2 rounded-lg mr-3 ${darkMode ? 'bg-blue-900/30' : 'bg-blue-100'}`}>
-                            <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500" />
-                          </div>
-                          <Badge className={`${getStatusColor(edu.status)} text-xs font-medium`}>
-                            {edu.status === 'ongoing' ? 'Currently Pursuing' : 'Completed'}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      <h3 className={`text-lg sm:text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {edu.degree}
-                      </h3>
-                      
-                      <h4 className="text-base sm:text-lg font-semibold text-blue-500 mb-3">
-                        {edu.institution}
-                      </h4>
-
-                      <div className="space-y-2 mb-4">
-                        <div className={`flex items-center ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                          <MapPin className="w-4 h-4 mr-2 text-gray-400" />
-                          <span className="text-sm">{edu.location}</span>
-                        </div>
-                        <div className={`flex items-center ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                          <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                          <span className="text-sm">{edu.year}</span>
-                        </div>
-                        <div className={`flex items-center ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                          <Award className="w-4 h-4 mr-2 text-gray-400" />
-                          <span className="text-sm font-medium">{edu.score}</span>
-                        </div>
-                      </div>
-
-                      {/* Score Visualization */}
-                      {edu.id === 1 && (
-                        <div className={`mt-4 p-3 rounded-lg ${darkMode ? 'bg-blue-900/20' : 'bg-blue-50'}`}>
-                          <div className="flex items-center justify-between mb-2">
-                            <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                              CGPA Progress
-                            </span>
-                            <span className="text-sm font-bold text-blue-500">7.9/10</span>
-                          </div>
-                          <div className={`w-full rounded-full h-2 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
-                            <div 
-                              className="bg-blue-500 h-2 rounded-full transition-all duration-1000"
-                              style={{ width: '79%' }}
-                            ></div>
-                          </div>
-                        </div>
-                      )}
+              <div className="ml-12 md:ml-0 md:w-1/2 md:px-5 w-full">
+                <div className="glass-panel-compact rounded-[2rem] p-6 transition-all duration-500 hover:bg-white/5 hover:border-white/20 group">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 rounded-xl bg-orange-500/10 text-orange-400">
+                      <GraduationCap className="w-5 h-5" />
                     </div>
-                  </Card>
-                </motion.div>
+                    <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${
+                      edu.status === 'completed' 
+                        ? 'bg-green-500/10 text-green-400 border-green-500/20' 
+                        : 'bg-orange-500/10 text-orange-400 border-orange-500/20'
+                    }`}>
+                      {edu.status === 'ongoing' ? 'In Progress' : 'Completed'}
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl md:text-2xl font-black text-white mb-1 group-hover:text-orange-400 transition-colors">
+                    {edu.degree}
+                  </h3>
+                  <h4 className="text-base font-bold text-gray-300 mb-5 flex items-center gap-2">
+                    <div className="w-1 h-3.5 bg-amber-400 rounded-full"></div>
+                    {edu.institution}
+                  </h4>
+
+                  <div className="space-y-2 mb-6">
+                    <div className="flex items-center text-gray-400 font-medium">
+                      <MapPin className="w-4 h-4 mr-3 text-orange-500" />
+                      <span className="text-xs sm:text-sm">{edu.location}</span>
+                    </div>
+                    <div className="flex items-center text-gray-400 font-medium">
+                      <Calendar className="w-4 h-4 mr-3 text-orange-500" />
+                      <span className="text-xs sm:text-sm">{edu.year}</span>
+                    </div>
+                  </div>
+
+                  {/* Progressive Score Bar */}
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="flex items-center justify-between mb-2 text-[10px] font-bold text-white uppercase tracking-wider">
+                      <span>Performance Index</span>
+                      <span className="text-orange-400">{edu.score}</span>
+                    </div>
+                    <div className="w-full rounded-full h-1 bg-white/5 overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        whileInView={{ width: '85%' }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        className="bg-gradient-to-r from-orange-500 to-amber-500 h-full rounded-full"
+                      ></motion.div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
-      {/* Academic Highlights */}
-      <motion.div variants={itemVariants} className="mt-12 md:mt-16">
-        <Card className={`border-2 transition-colors ${
-          darkMode 
-            ? 'bg-gradient-to-br from-blue-900/20 to-purple-900/20 border-blue-800/50' 
-            : 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200'
-        }`}>
-          <div className="p-6 sm:p-8">
-            <h3 className={`text-2xl font-bold mb-6 text-center ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Academic Highlights
-            </h3>
-            <div className="grid sm:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <GraduationCap className="w-8 h-8 text-white" />
+      {/* Metrics HUD */}
+      <motion.div variants={itemVariants} className="mt-16 sm:mt-24">
+        <div className="glass-panel rounded-[2.5rem] p-8 sm:p-12 overflow-hidden relative">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-12 relative z-10">
+            {[
+              { label: "Engineering CGPA", value: "7.9/10", icon: Award, color: "text-orange-400" },
+              { label: "High School Score", value: "89.6%", icon: Award, color: "text-amber-400" },
+              { label: "Analytical Thinking", value: "Top Tier", icon: Brain, color: "text-rose-400" }
+            ].map((metric, i) => (
+              <div key={i} className="flex flex-col items-center group">
+                <div className={`p-4 rounded-2xl bg-white/5 ${metric.color} mb-5 sm:mb-6 transition-transform duration-500 group-hover:scale-110`}>
+                  <metric.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <h4 className={`text-base sm:text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                  Current CGPA
-                </h4>
-                <p className="text-xl sm:text-2xl font-bold text-blue-500">7.9/10</p>
+                <h4 className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">{metric.label}</h4>
+                <p className="text-2xl sm:text-3xl font-black text-white">{metric.value}</p>
               </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="w-8 h-8 text-white" />
-                </div>
-                <h4 className={`text-base sm:text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                  PUC Score
-                </h4>
-                <p className="text-xl sm:text-2xl font-bold text-green-500">76.67%</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="w-8 h-8 text-white" />
-                </div>
-                <h4 className={`text-base sm:text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                  10th Grade
-                </h4>
-                <p className="text-xl sm:text-2xl font-bold text-purple-500">89.6%</p>
-              </div>
-            </div>
+            ))}
           </div>
-        </Card>
+        </div>
       </motion.div>
     </motion.div>
   );
