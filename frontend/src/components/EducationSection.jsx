@@ -131,7 +131,7 @@ const EducationSection = () => {
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-12 relative z-10">
             {[
-              { label: "Engineering CGPA", value: "7.9/10", icon: Award, color: "text-orange-400" },
+              { label: "Engineering CGPA", value: "8.2/10", icon: Award, color: "text-orange-400" },
               { label: "High School Score", value: "89.6%", icon: Award, color: "text-amber-400" },
               { label: "Analytical Thinking", value: "Top Tier", icon: Brain, color: "text-rose-400" }
             ].map((metric, i) => (

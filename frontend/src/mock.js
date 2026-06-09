@@ -20,9 +20,9 @@ export const portfolioData = {
       degree: "B.E. in Information Science and Engineering",
       institution: "SJB Institute of Technology",
       location: "Bengaluru",
-      score: "CGPA: 7.9",
+      score: "CGPA: 8.2",
       year: "2022-2026",
-      status: "ongoing"
+      status: "completed"
     },
     {
       id: 2,
@@ -98,7 +98,7 @@ export const portfolioData = {
         "Plans for multilingual support"
       ],
       github: "https://github.com/Veeresh-hp/BOLT",
-      status: "ongoing",
+      status: "completed",
       category: "AI/ML Project",
       bgColor: "mid-purple"
     }
